@@ -24,4 +24,12 @@ class PromptGenerator
 
         return randomPrompt;
     }
+
+    public string CreateCustomPrompt()
+    {
+        Console.WriteLine("What is your prompt? ");
+        string customPrompt = Console.ReadLine();
+
+        return customPrompt;
+    }
 }

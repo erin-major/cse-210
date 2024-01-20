@@ -33,8 +33,7 @@ class Journal
             else if (promptType.ToLower() == "custom")
             {
                 validPromptVersion = true;
-                Console.WriteLine("What is your prompt? ");
-                newEntry._promptText = Console.ReadLine();
+                newEntry._promptText = promptGen.CreateCustomPrompt();
                 Console.WriteLine("Now answer your prompt.");
             }
 
