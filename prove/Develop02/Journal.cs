@@ -34,7 +34,7 @@ class Journal
             {
                 validPromptVersion = true;
                 newEntry._promptText = promptGen.CreateCustomPrompt();
-                Console.WriteLine("Now answer your prompt.");
+                Console.WriteLine("\nNow answer your prompt.");
             }
 
             else

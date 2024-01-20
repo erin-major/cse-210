@@ -53,3 +53,7 @@ class Program
         }
     }
 }
+
+// The extra creativity I showed in this project was adding a skip in the random prompt generator, adding the ability to
+// create a custom prompt, adding additional prompts, adding a try catch block for loading a file, and adding an option in
+// the main menu if the user enters anything other than 1-5.
