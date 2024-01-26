@@ -7,12 +7,21 @@ public class Word
 
     public Word(string text)
     {
-        // not sure here
+        _text = text;
     }
 
     public void Hide()
     {
+        char[] wordAsChars = _text.ToCharArray();
+                
+        for (int i = 0; i < wordAsChars.Length; i++)
+        {
+            wordAsChars[i] = '_';
+        }
 
+        string updatedWord = new string(wordAsChars);
+        _text = updatedWord;
+        _isHidden = true;
     }
 
     public void Show()
@@ -22,12 +31,12 @@ public class Word
 
     public bool IsHidden()
     {
-        return false;
+        return _isHidden;
     }
 
     public string GetDisplayText()
     {
-        return "";
+        return _text;
     }
 
 }
