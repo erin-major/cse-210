@@ -34,6 +34,6 @@ class Program
 }
 
 // I showed creativity by only hiding words that haven't been hidden already.
-// I also didn't hide punctuation, because I felt like that gave an incorrect appreance
+// I also didn't hide punctuation, because I felt like that gave an incorrect appearance
 // of the length of the word. The punctuation remains, but the rest of the word is hidden.
 
