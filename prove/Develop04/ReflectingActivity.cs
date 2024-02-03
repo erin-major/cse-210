@@ -16,8 +16,11 @@ public class ReflectingActivity : Activity
     {
         DisplayStartingMessage();
         ShowSpinner(5);
+        SetPrompts();
+        SetQuestions();
         DisplayPrompt();
-                
+
+        // This while loop handles the scenario where a user inputs something other than enter.        
         while(true)
         {
             Console.WriteLine("\nWhen you have something in mind, press enter to continue.");
@@ -35,25 +38,19 @@ public class ReflectingActivity : Activity
         Console.Clear();
 
         DisplayQuestions();
-        Console.WriteLine();
         DisplayEndingMessage();   
     }
 
-    public string GetRandomPrompt()
+    public void SetPrompts()
     {
         _prompts.Add("Think of a time when you stood up for someone else.");
         _prompts.Add("Think of a time when you did something really difficult.");
         _prompts.Add("Think of a time when you helped someone in need.");
         _prompts.Add("Think of a time when you did something truly selfless.");
         _prompts.Add("Think of a time when you intentionally decided to give your absolute best effort.");
-        
-        Random randomNum = new Random();
-        int i = randomNum.Next(0, _prompts.Count);
-        
-        return _prompts[i];
     }
 
-    public string GetRandomQuestion()
+    public void SetQuestions()
     {
         _questions.Add("Why was this experience meaningful to you?");
         _questions.Add("Have you ever done anything like this before?");
@@ -64,18 +61,37 @@ public class ReflectingActivity : Activity
         _questions.Add("What could you learn from this experience that applies to other situations?");
         _questions.Add("What did you learn about yourself through this experience?");
         _questions.Add("How can you keep this experience in mind in the future?");
-        
+    }
+
+    public string GetRandomPrompt()
+    {
+        Random randomNum = new Random();
+        int i = randomNum.Next(0, _prompts.Count);
+                
+        return _prompts[i];
+    }
+
+    public string GetRandomQuestion()
+    {
         Random randomNum = new Random();
         int i = randomNum.Next(0, _questions.Count);
+        string question = _questions[i];
+        _questions.RemoveAt(i);
         
-        return _questions[i];
+        // If the user has gone through all the questions, the question list is reset. 
+        if (_questions.Count == 0)
+        {
+            SetQuestions();
+        }
+
+        return question;
     }
 
     public void DisplayPrompt()
     {
         Console.WriteLine("\nConsider the following prompt:\n");
         string prompt = GetRandomPrompt();
-        Console.WriteLine($"--- {prompt} ---");
+        Console.WriteLine($" --- {prompt} --- ");
     }
 
     public void DisplayQuestions()
@@ -85,7 +101,7 @@ public class ReflectingActivity : Activity
         while (loopDuration > 0)
         {
             string question = GetRandomQuestion();
-            Console.Write($"> {question}");
+            Console.Write($"> {question} ");
             ShowSpinner(15);
             Console.WriteLine();
             loopDuration = loopDuration - 15;

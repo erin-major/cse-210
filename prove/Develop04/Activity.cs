@@ -5,12 +5,7 @@ public class Activity
     protected string _name;
     protected string _description;
     protected int _duration;
-
-    public Activity()
-    {
-        
-    }
-
+    
     public void DisplayStartingMessage()
     {
         Console.Clear();
@@ -32,6 +27,7 @@ public class Activity
 
     public void ShowSpinner(int seconds)
     {
+        // This loop takes 2 seconds, so I'm dividing the seconds by 2.
         int loopLength = seconds / 2;
 
         for (int i = 0; i <= loopLength; i++)
@@ -62,3 +58,6 @@ public class Activity
         
     }
 }
+
+// I showed creativity by making sure the user doesn't get the same question in the
+// reflecting activity until they've made it through the entire list. 

@@ -8,10 +8,10 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("Menu Options:");
-            Console.WriteLine("1. Start breating activity");
-            Console.WriteLine("2. Start reflecting activity");
-            Console.WriteLine("3. Start listing activity");
-            Console.WriteLine("4. Quit");
+            Console.WriteLine(" 1. Start breating activity");
+            Console.WriteLine(" 2. Start reflecting activity");
+            Console.WriteLine(" 3. Start listing activity");
+            Console.WriteLine(" 4. Quit");
             Console.Write("Select a choice from the menu: ");
             string userSelection = Console.ReadLine();
 
@@ -29,7 +29,8 @@ class Program
 
             else if (userSelection == "3")
             {
-
+                ListingActivity list = new ListingActivity();
+                list.Run();
             }
 
             else if (userSelection == "4")
@@ -40,6 +41,7 @@ class Program
             else
             {
                 Console.WriteLine("\nInvalid entry. Please enter 1-4.\n");
+                Thread.Sleep(2000);
             }
         }
 

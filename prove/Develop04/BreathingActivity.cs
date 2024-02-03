@@ -19,11 +19,13 @@ public class BreathingActivity : Activity
 
         while (loopDuration > 0)
         {
-            interval = randomInterval.Next(3, 8);
+            // I felt anything less than 3 seconds was too short and 
+            // anything over 8 was too long. 
+            interval = randomInterval.Next(3, 9);
             Console.Write($"\n\nBreathe in...");
             ShowCountDown(interval);
             loopDuration = loopDuration - interval;
-            interval = randomInterval.Next(3, 8);
+            interval = randomInterval.Next(3, 9);
             Console.Write($"\nNow breathe out...");
             ShowCountDown(interval);
             loopDuration = loopDuration - interval;
