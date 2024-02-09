@@ -13,6 +13,11 @@ public abstract class Goal
         _points = points;   
     }
 
+    public string GetName()
+    {
+        return _shortName;
+    }
+
     public abstract void RecordEvent();
 
     public abstract bool IsComplete();
@@ -21,6 +26,17 @@ public abstract class Goal
 
     public virtual string GetDetailsString()
     {
-        return "";
+        string details = "";
+        
+        if (IsComplete())
+        {
+            details = $"[x] {_shortName} ({_description})";
+        }
+        else
+        {
+            details = $"[ ] {_shortName} ({_description})";
+        }
+        
+        return details;
     }
 }
