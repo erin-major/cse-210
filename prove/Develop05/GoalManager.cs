@@ -30,26 +30,47 @@ public class GoalManager
             {
                 CreateGoal();
             }
+
             else if (userChoice == "2")
             {
-                ListGoalDetails();
+                if (_goals.Count == 0)
+                {
+                    Console.WriteLine("You don't have any goals set. Add or load some goals!");
+                }
+                else 
+                {
+                    ListGoalDetails();
+                }
             }
+
             else if (userChoice == "3")
             {
                 SaveGoals();
             }
+
             else if (userChoice == "4")
             {
                 LoadGoals();
             }
+
             else if (userChoice == "5")
             {
-                RecordEvent();
+                if (_goals.Count == 0)
+                {
+                    Console.WriteLine("You don't have any goals set. Add or load some goals!");
+                }
+
+                else 
+                {
+                    RecordEvent();
+                }
             }
+
             else if (userChoice == "6")
             {
                 break;
             }
+
             else
             {
                 Console.WriteLine("\nInvalid input. Please enter 1-6.");
@@ -73,12 +94,12 @@ public class GoalManager
             Console.WriteLine($"{goalNum}. {g.GetName()}");
             goalNum += 1;
         }
-
     }
 
     public void ListGoalDetails()
     {   
         int goalNum = 1;
+        Console.WriteLine("\nThe goals are: ");
 
         foreach (Goal g in _goals)
         {
@@ -97,8 +118,6 @@ public class GoalManager
             Console.WriteLine("  3. Checklist Goal");
             Console.Write("Which type of goal would you like to create? ");
             string userGoalChoice = Console.ReadLine();
-            
-
 
             if (userGoalChoice == "1" || userGoalChoice == "2" || userGoalChoice == "3")
             {
@@ -131,6 +150,7 @@ public class GoalManager
                     ChecklistGoal checklistGoal = new ChecklistGoal(name, description, points, target, bonus);
                     _goals.Add(checklistGoal);
                 }
+
                 break;
             }
             
@@ -139,7 +159,6 @@ public class GoalManager
                 Console.WriteLine("\nInvalid input. Please enter 1-3.\n");
                 Thread.Sleep(2000);
             }
-
         }
     }
 
@@ -149,8 +168,8 @@ public class GoalManager
         ListGoalNames();
         Console.Write("Which goal did you accomplish? ");
         int userGoal = int.Parse(Console.ReadLine());
-        _goals[userGoal].RecordEvent();
-
+        _score = _score + _goals[userGoal - 1].RecordEvent();
+        Console.WriteLine($"You now have {_score} points!");
     }
 
     public void SaveGoals()
@@ -171,31 +190,40 @@ public class GoalManager
 
     public void LoadGoals()
     {
-        Console.Write("What is the filename for the goal file? ");
-        string fileName = Console.ReadLine(); 
-        string[] lines = System.IO.File.ReadAllLines(fileName);
-
-        foreach (string line in lines)
+        try
         {
-            string[] parts = line.Split("|");
+            Console.Write("What is the filename for the goal file? ");
+            string fileName = Console.ReadLine(); 
+            string[] lines = System.IO.File.ReadAllLines(fileName);
+            _score = int.Parse(lines[0]);
 
-            if (parts[0] == "SimpleGoal")
+            foreach (string line in lines)
             {
-                SimpleGoal simpleGoal = new SimpleGoal(parts[1], parts[2], parts[3]);
-                _goals.Add(simpleGoal);
-            }
-            else if (parts[0] == "EternalGoal")
-            {
-                EternalGoal eternalGoal = new EternalGoal(parts[1], parts[2], parts[3]);
-                _goals.Add(eternalGoal);
-            }
-            else if (parts[0] == "ChecklistGoal")
-            {
-                ChecklistGoal checklistGoal = new ChecklistGoal(parts[1], parts[2], parts[3], int.Parse(parts[4]), int.Parse(parts[5]), amountCompleted:int.Parse(parts[6]));
-                _goals.Add(checklistGoal);
-            }
+                string[] parts = line.Split("|");
 
+                if (parts[0] == "SimpleGoal")
+                {
+                    bool completeStatus = Convert.ToBoolean(parts[4]);
+                    SimpleGoal simpleGoal = new SimpleGoal(parts[1], parts[2], parts[3], complete:completeStatus);
+                    _goals.Add(simpleGoal);
+                }
+
+                else if (parts[0] == "EternalGoal")
+                {
+                    EternalGoal eternalGoal = new EternalGoal(parts[1], parts[2], parts[3]);
+                    _goals.Add(eternalGoal);
+                }
+
+                else if (parts[0] == "ChecklistGoal")
+                {
+                    ChecklistGoal checklistGoal = new ChecklistGoal(parts[1], parts[2], parts[3], int.Parse(parts[4]), int.Parse(parts[5]), amountCompleted:int.Parse(parts[6]));
+                    _goals.Add(checklistGoal);
+                }
+            }
+        } catch (FileNotFoundException e)
+        {
+            Console.WriteLine("\nInvalid entry! The file was not found.\n");
+            Thread.Sleep(2000);
         }
-
-    }
-    }
+    }   
+}

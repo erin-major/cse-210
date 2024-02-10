@@ -7,7 +7,8 @@ class Program
         GoalManager goals = new GoalManager();
 
         goals.Start();
-    }
-
-    // You need to store the first line in the .txt as the score.
+    }    
 }
+
+// I exceeded expectations by adding a try catch block when loading the file.
+// I added a catch if the user input something other than 1-6 for the menu.

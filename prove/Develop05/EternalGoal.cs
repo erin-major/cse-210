@@ -9,9 +9,11 @@ public class EternalGoal : Goal
         _points = points;
     }
 
-    public override void RecordEvent()
+    public override int RecordEvent()
     {
         Console.WriteLine($"\nCongratulations! You have earned {_points} points!");
+
+        return int.Parse(_points);
     }
 
     public override bool IsComplete()

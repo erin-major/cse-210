@@ -4,18 +4,20 @@ public class SimpleGoal : Goal
 {
     private bool _isComplete;
 
-    public SimpleGoal(string name, string description, string points) : base(name, description, points)
+    public SimpleGoal(string name, string description, string points, bool complete=false) : base(name, description, points)
     {
         _shortName = name;
         _description = description;
         _points = points;
-        _isComplete = false;
+        _isComplete = complete;       
     }
 
-    public override void RecordEvent()
+    public override int RecordEvent()
     {
         _isComplete = true;
         Console.WriteLine($"\nCongratulations! You have earned {_points} points!");
+        
+        return int.Parse(_points);
     }
 
     public override bool IsComplete()

@@ -14,10 +14,11 @@ public class ChecklistGoal : Goal
         _description = description;
         _points = points;
         _target = target;
-        _bonus = bonus;        
+        _bonus = bonus;
+        _amountCompleted = amountCompleted;        
     }
 
-    public override void RecordEvent()
+    public override int RecordEvent()
     {
         _amountCompleted += 1;
         int totalEarned = int.Parse(_points);
@@ -27,7 +28,9 @@ public class ChecklistGoal : Goal
             totalEarned = int.Parse(_points) + _bonus;
         }
 
-        Console.WriteLine($"\nCongratulations! You have earned {totalEarned} points!");       
+        Console.WriteLine($"\nCongratulations! You have earned {totalEarned} points!");     
+
+        return totalEarned;  
     }
 
     public override bool IsComplete()
@@ -50,6 +53,7 @@ public class ChecklistGoal : Goal
         {
             details = $"[x] {_shortName} ({_description}) -- Currently completed: {_amountCompleted}/{_target}";
         }
+        
         else
         {
             details = $"[ ] {_shortName} ({_description}) -- Currently completed: {_amountCompleted}/{_target}";

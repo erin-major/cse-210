@@ -18,7 +18,7 @@ public abstract class Goal
         return _shortName;
     }
 
-    public abstract void RecordEvent();
+    public abstract int RecordEvent();
 
     public abstract bool IsComplete();
 
@@ -32,6 +32,7 @@ public abstract class Goal
         {
             details = $"[x] {_shortName} ({_description})";
         }
+        
         else
         {
             details = $"[ ] {_shortName} ({_description})";
