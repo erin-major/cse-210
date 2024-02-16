@@ -4,6 +4,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello FinalProject World!");
+        Console.Clear();
+        
+        ItemManager items = new ItemManager();
+        items.Start();
     }
 }
