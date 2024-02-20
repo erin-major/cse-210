@@ -10,8 +10,24 @@ public class BoardGame : Item
         _version = version;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
+        string displayString = "";
         
+        if (_version == null)
+        {
+            displayString = $"Board Game: {_name}";
+        }
+        else
+        {
+            displayString = $"Board Game: {_name}, {_version} version";
+        }
+        
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"BoardGame|{_name}|{_version}|";
     }
 }

@@ -12,8 +12,15 @@ public class Book : Item
         _format = format;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
-        
+        string displayString = $"Book: {_name} by {_author} - {_format}";
+
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"Book|{_name}|{_author}|{_format}|";;
     }
 }

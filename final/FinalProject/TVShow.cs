@@ -14,8 +14,24 @@ public class TVShow : Item
         _version = version;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
+        string displayString = "";
         
+        if (_version == null)
+        {
+            displayString = $"TV Show: {_name} seasons {_seasons} - {_format}";
+        }
+        else
+        {
+            displayString = $"TV Show: {_name} seasons {_seasons}, {_version} version - {_format}";
+        }
+        
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"TVShow|{_name}|{_seasons}|{_format}|{_version}|";
     }
 }

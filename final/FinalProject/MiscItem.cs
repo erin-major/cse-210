@@ -10,8 +10,15 @@ public class MiscItem : Item
         _description = description;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
-        
+        string displayString = $"Miscellaneous Item: {_name}, {_description}";
+
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"TVShow|{_name}|{_description}|";
     }
 }

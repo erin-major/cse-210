@@ -1,4 +1,5 @@
 using System;
+using System.Formats.Asn1;
 using System.Globalization;
 
 public class ItemManager
@@ -29,23 +30,59 @@ public class ItemManager
             {
                 string itemType = DisplayItemMenu("add");
                 AddItem(itemType);
-
             }
             else if (userChoice == "2")
             {
-                
+                if (_ownedItems.Count == 0 & _wishListItems.Count == 0)
+                {
+                    Console.WriteLine("You do not have any items in your collection list or wishlist. Please add some items first.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    RemoveItem(); 
+                }     
             }
             else if (userChoice == "3")
             {
-                
+                if (_wishListItems.Count == 0)
+                {
+                    Console.WriteLine("You do not have any items in your wishlist. Please add some items first.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    MoveBetweenLists();
+                }
             }
             else if (userChoice == "4")
             {
-                
+                if (_ownedItems.Count == 0 & _wishListItems.Count == 0)
+                {
+                    Console.WriteLine("You do not have any items in your collection list or wishlist. Please add some items first.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    List<Item> workingList = ListSelection();
+                    DisplayFullList(workingList); 
+                }
             }
             else if (userChoice == "5")
             {
-                SaveList();   
+                if (_ownedItems.Count == 0 & _wishListItems.Count == 0)
+                {
+                    Console.WriteLine("You do not have any items in your collection list or wishlist. Please add some items first.");
+                    Thread.Sleep(3000);
+                    Console.Clear();
+                }
+                else
+                {
+                    SaveList();  
+                }
             }
             else if (userChoice == "6")
             {
@@ -63,7 +100,6 @@ public class ItemManager
                 Console.Clear();
             }
         }
-
     }
 
     public string DisplayItemMenu(string action)
@@ -115,16 +151,16 @@ public class ItemManager
                 }
                 else
                 {
-                    Console.WriteLine("\n Invalid entry. Please enter 1-6.");
+                    Console.WriteLine("\nInvalid entry. Please enter 1-6.");
                     Thread.Sleep(3000);
                 }
-        }
-        
+        }  
         return itemType;
     }
 
     public void AddItem(string itemType)
     {
+        List<Item> workingList = ListSelection(); 
         Console.Write($"\nWhat is the name of your {itemType}? ");
         string name = Console.ReadLine();
 
@@ -135,9 +171,8 @@ public class ItemManager
             Console.Write($"What format is your book in? ");
             string format = Console.ReadLine();
             Book book = new Book(name, author, format);
-            AddToList(book);
+            workingList.Add(book);
         }
-
         else if (itemType == "movie")
         {
             Console.Write($"What year was your movie released? ");
@@ -145,9 +180,8 @@ public class ItemManager
             Console.Write($"What format is your movie in? ");
             string format = Console.ReadLine();
             Movie movie = new Movie(name, year, format);
-            AddToList(movie);
+            workingList.Add(movie);
         }
-
         else if (itemType == "tv show")
         {
             Console.Write($"Which seasons do you have? ");
@@ -160,12 +194,12 @@ public class ItemManager
             if (version == "")
             {
                 TVShow show = new TVShow(name, seasons, format);
-                AddToList(show);
+                workingList.Add(show);
             }
             else
             {
                 TVShow show = new TVShow(name, seasons, format, version);
-                AddToList(show);
+                workingList.Add(show);
             }
         }
         else if (itemType == "video game")
@@ -177,12 +211,12 @@ public class ItemManager
             if (version == "")
             {
                 VideoGame videoGame = new VideoGame(name, system);
-                AddToList(videoGame);
+                workingList.Add(videoGame);
             }
             else
             {
                 VideoGame videoGame = new VideoGame(name, system, version);
-                AddToList(videoGame);
+                workingList.Add(videoGame);
             }
         }
         else if (itemType == "board game")
@@ -192,12 +226,12 @@ public class ItemManager
             if (version == "")
             {
                 BoardGame boardGame = new BoardGame(name);
-                AddToList(boardGame);
+                workingList.Add(boardGame);
             }
             else
             {
                 BoardGame boardGame = new BoardGame(name, version);
-                AddToList(boardGame);
+                workingList.Add(boardGame);
             }
         }
         else if (itemType == "misc. item")
@@ -205,26 +239,28 @@ public class ItemManager
             Console.Write($"Please give a brief description of your item: ");
             string description = Console.ReadLine();
             MiscItem miscItem = new MiscItem(name, description);
-            AddToList(miscItem);
+            workingList.Add(miscItem);
         }
+        workingList.Sort();
+        Console.WriteLine("Success! Your item has been added!");
+        Thread.Sleep(3000);
+        Console.Clear();
     }
 
-    public void AddToList(Item item)
+    public List<Item> ListSelection()
     {
         while(true)
         {
-            Console.Write("\nWhich list would you like to add this to? (collection/wishlist) ");
+            Console.Write("\nWhich list would you like to work with? (collection/wishlist) ");
             string userChoice = Console.ReadLine();
 
             if (userChoice.ToLower() == "collection")
             {
-                _ownedItems.Add(item);
-                break;
+                return _ownedItems;
             }
             else if (userChoice.ToLower() == "wishlist")
             {
-                _wishListItems.Add(item);
-                break;
+                return _wishListItems;
             }
             else
             {
@@ -232,46 +268,150 @@ public class ItemManager
                 Thread.Sleep(3000);
             }
         }
-
-        Console.WriteLine("Success! Your item has been added!");
-        Thread.Sleep(3000);
-        Console.Clear();
-
     }
     
     public void RemoveItem()
     {
+        List<Item> workingList = ListSelection();
+        DisplayFullList(workingList);
+        Console.Write("\nWhich item do you want to remove? ");
+        int removeNum = int.Parse(Console.ReadLine()) - 1;
+        workingList.Remove(workingList[removeNum]);
 
+        Console.WriteLine("\nSuccess! Your item has been removed.");
+        Thread.Sleep(3000);
+        Console.Clear();
     }
 
-    public void DisplayFullList()
+    public void DisplayFullList(List<Item> list)
     {
-
+        Console.WriteLine();
+        int displayNumber = 1;
+        string itemDisplay = "";
+        foreach (Item i in list)
+        {
+            itemDisplay = i.DisplayItem();
+            Console.WriteLine($"{displayNumber}) {itemDisplay}");
+            displayNumber += 1;
+        }
+        Console.WriteLine();
     }
 
-    public void DisplayCategory()
+    public void MoveBetweenLists()
     {
+        Console.WriteLine("\nHere is your wishlist: ");
+        DisplayFullList(_wishListItems);
+        Console.Write("\nWhich item do you want to move to your collection? ");
+        int moveNum = int.Parse(Console.ReadLine()) - 1;
+        _ownedItems.Add(_wishListItems[moveNum]);
+        _wishListItems.Remove(_wishListItems[moveNum]);
 
-    }
-
-    public void DisplayCustomSearch()
-    {
-
-    }
-
-    public void SortCategory()
-    {
+        Console.WriteLine("\nSuccess! Your item has been moved to your collection.");
+        Thread.Sleep(3000);
+        Console.Clear();
 
     }
 
     public void SaveList()
     {
+        Console.Write("What is the filename for the output file? ");
+        string fileName = Console.ReadLine();
 
+        using (StreamWriter outputFile = new StreamWriter(fileName))
+        {
+            outputFile.WriteLine("Owned");
+            
+            foreach (Item i in _ownedItems)
+            {
+                outputFile.WriteLine(i.GetStringRepresentation());
+            }
+
+            outputFile.WriteLine("WishList");
+            
+            foreach (Item i in _wishListItems)
+            {
+                outputFile.WriteLine(i.GetStringRepresentation());
+            }
+        }
+
+        Console.WriteLine("\nSuccess! Your lists were saved to a file.");
+        Thread.Sleep(3000);
+        Console.Clear();
     }
 
     public void LoadList()
     {
+        try
+        {
+            Console.Write("What is the filename for the file? ");
+            string fileName = Console.ReadLine(); 
+            string[] lines = System.IO.File.ReadAllLines(fileName);
+            List<Item> workingList = _ownedItems;
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split("|");
 
+                if (parts[0] == "WishList")
+                {
+                    workingList = _wishListItems;
+                }
+
+                if (parts[0] == "Movie")
+                {
+                    Movie movie = new Movie(parts[1], parts[2], parts[3]);
+                    workingList.Add(movie);
+                }
+                else if (parts[0] == "Book")
+                {
+                    Book book = new Book(parts[1], parts[2], parts[3]);
+                    workingList.Add(book);
+                }
+                else if (parts[0] == "TVShow")
+                {
+                    string version = null;
+                    if (parts.Length == 5)
+                    {
+                        version = parts[4];
+                    }
+                    TVShow tvShow = new TVShow(parts[1], parts[2], parts[3], version);
+                    workingList.Add(tvShow);
+                }
+                else if (parts[0] == "VideoGames")
+                {
+                    string version = null;
+                    if (parts.Length == 4)
+                    {
+                        version = parts[3];
+                    }
+                    VideoGame videoGame = new VideoGame(parts[1], parts[2], version);
+                    workingList.Add(videoGame);
+                }  
+                else if (parts[0] == "BoardGames")
+                {
+                    string version = null;
+                    if (parts.Length == 3)
+                    {
+                        version = parts[2];
+                    }
+                    BoardGame boardGame = new BoardGame(parts[1], version);
+                    workingList.Add(boardGame);
+                }                
+                else if (parts[0] == "MiscItem")
+                {
+                    MiscItem miscItem = new MiscItem(parts[1], parts[2]);
+                    workingList.Add(miscItem);
+                }
+            }
+
+            Console.WriteLine("\nSuccess! Your lists were loaded from the file.");
+            Thread.Sleep(3000);
+            Console.Clear();
+
+        } catch (FileNotFoundException e)
+        {
+            Console.WriteLine("\nInvalid entry! The file was not found.\n");
+            Thread.Sleep(2000);
+            Console.Clear();
+        }
     }
-
 }

@@ -12,8 +12,24 @@ public class VideoGame : Item
         _version = version;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
+        string displayString = "";
         
+        if (_version == null)
+        {
+            displayString = $"Video Game: {_name} on {_system}";
+        }
+        else
+        {
+            displayString = $"Video Game: {_name}, {_version} version on {_system}";
+        }
+        
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"VideoGame|{_name}|{_system}|{_version}|";
     }
 }

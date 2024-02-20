@@ -12,8 +12,15 @@ public class Movie : Item
         _format = format;
     }
 
-    public override void DisplayItem()
+    public override string DisplayItem()
     {
-        
+        string displayString = $"Movie: {_name}, {_year} - {_format}";
+
+        return displayString;
+    }
+
+    public override string GetStringRepresentation()
+    {
+        return $"Movie|{_name}|{_year}|{_format}|";
     }
 }
